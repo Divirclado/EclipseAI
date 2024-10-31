@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eclipse AI</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url("{{ url_for('static', filename='fondo.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #cd00ff;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typewriter-text {
+            overflow: hidden;
+            border-right: .15em solid #D291BC;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #D291BC; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: block;
+            margin: 10px auto 0 auto;
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='imagen.png') }}" alt="Mi Imagen" style="width: 600px; height: auto;">
+        </header>
+        <main style="margin-top: 20px;">
+            <form id="chat-form">
+                <input type="text" id="message" placeholder="Escribe tu mensaje aquí..." style="width: 80%; padding: 10px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #D291BC;">
+                <button type="submit" style="padding: 10px 20px; background-color: #D291BC; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Enviar</button>
+            </form>
+            <div id="response" style="margin-top: 20px; padding: 10px; border: 1px solid #D291BC; border-radius: 4px; background-color: #f9f9f9; color: #000;"></div>
+        </main>
+        <footer style="margin-top: 20px; color: #000;">
+            <p>Desarrollado por <strong>Here Idea Education</strong>. Todos los derechos reservados &copy; 2024.</p>
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="footer-logo">
+        </footer>
+    </div>
+    <script>
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = document.getElementById('message').value;
+
+            fetch('/webhook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const responseElement = document.getElementById('response');
+                responseElement.innerHTML = '';  // Limpiar respuesta previa
+                const text = data.reply;
+                let i = 0;
+
+                function typeWriter() {
+                    if (i < text.length) {
+                        responseElement.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 50);
+                    }
+                }
+
+                typeWriter();  // Llamar a la función para animar el efecto de escritura
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
