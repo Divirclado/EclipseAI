@@ -135,6 +135,36 @@
             width: 600px; /* Tamaño del GIF */
             height: auto; /* Mantener proporción */
         }
+
+        /* Media queries para pantallas pequeñas */
+        @media only screen and (max-width: 768px) {
+            .chat-container {
+                width: 90%; /* Ajusta el contenedor del chat */
+                margin: 5vh auto; /* Reduce el margen en móviles */
+                padding: 15px;
+            }
+
+            .logo {
+                width: 80px; /* Logo más pequeño */
+                height: 80px;
+            }
+
+            .gif-container img {
+                width: 100%; /* Ajusta el GIF para el ancho del contenedor */
+                max-width: 400px; /* Limita el tamaño máximo del GIF */
+                height: auto;
+            }
+
+            .bubble {
+                font-size: 12px; /* Reducir tamaño de la fuente */
+                max-width: 100%; /* Asegura que las burbujas no excedan el ancho del dispositivo */
+            }
+
+            button, input[type="text"] {
+                font-size: 14px; /* Fuente más pequeña */
+                padding: 8px; /* Reduce el espacio */
+            }
+        }
     </style>
 </head>
 <body>
