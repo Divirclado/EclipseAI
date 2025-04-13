@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot con Música</title>
+    <title>Eclipse AI</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <style>
         body {
@@ -14,7 +14,7 @@
             overflow: hidden;
         }
 
-        /* Video de fondo */
+        /* Contenedor del video */
         .video-background {
             position: absolute;
             top: 0;
@@ -31,43 +31,31 @@
             object-fit: cover;
         }
 
-        /* Logo en la esquina */
+        /* Contenedor del logo */
         .logo {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 80px;
-            height: 80px;
-            z-index: 10;
+            width: 100px;
+            height: 100px;
+            z-index: 10; /* Asegura que esté encima de otros elementos */
         }
 
-        /* Contenedor principal */
-        .container {
+        /* Contenedor del chat */
+        .chat-container {
             position: relative;
             z-index: 1;
-            width: 90%;
+            width: 100%;
             max-width: 600px;
-            margin: 5vh auto;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.85); /* Fondo semitransparente */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            margin: 10vh auto;
         }
 
-        /* GIF encima del chat */
-        .gif-container img {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            border-radius: 10px;
-        }
-
-        /* Chat principal */
         #chat-box {
-            max-height: 300px;
+            height: 300px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -97,7 +85,7 @@
         }
 
         .bubble {
-            max-width: 80%;
+            max-width: 70%;
             padding: 10px;
             border-radius: 10px;
             font-size: 14px;
@@ -113,91 +101,68 @@
         .message.bot .bubble {
             background: #e5e5e5;
         }
-                /* Formularios */
-                form {
+
+        form {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        input[type="text"], input[type="file"] {
-            width: 100%;
+        input[type="text"] {
+            flex: 1;
             padding: 10px;
-            font-size: 14px;
             border-radius: 5px;
             border: 1px solid #ddd;
         }
 
         button {
-            width: 100%;
-            padding: 10px;
-            background-color: #6a0dad;
+            padding: 10px 20px;
+            background-color: #6a0dad; /* Color morado */
             color: #fff;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #520a87;
+            background-color: #520a87; /* Morado más oscuro al pasar el mouse */
         }
 
-        /* Reproductor de música */
-        .music-container {
-            padding: 15px;
-            background: rgba(240, 240, 240, 0.85);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        /* Estilo del GIF */
+        .gif-container img {
+            display: block;
+            margin: 0 auto;
+            width: 600px; /* Tamaño del GIF */
+            height: auto; /* Mantener proporción */
         }
 
-        .music-container label {
-            font-size: 16px;
-            color: #6a0dad;
-            font-weight: 600;
-        }
-
-        iframe, audio {
-            width: 100%;
-            border: none;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        /* Responsividad con Media Queries */
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
+        /* Media queries para pantallas pequeñas */
+        @media only screen and (max-width: 768px) {
+            .chat-container {
+                width: 90%; /* Ajusta el contenedor del chat */
+                margin: 5vh auto; /* Reduce el margen en móviles */
                 padding: 15px;
             }
 
             .logo {
-                width: 60px;
-                height: 60px;
+                width: 80px; /* Logo más pequeño */
+                height: 80px;
             }
 
-            button, input[type="text"], input[type="file"] {
-                font-size: 14px;
-            }
-
-            .bubble {
-                font-size: 12px;
-            }
-
-            iframe, audio {
-                height: 150px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .message img {
-                width: 30px;
-                height: 30px;
+            .gif-container img {
+                width: 100%; /* Ajusta el GIF para el ancho del contenedor */
+                max-width: 400px; /* Limita el tamaño máximo del GIF */
+                height: auto;
             }
 
             .bubble {
-                font-size: 11px;
-                padding: 8px;
+                font-size: 12px; /* Reducir tamaño de la fuente */
+                max-width: 100%; /* Asegura que las burbujas no excedan el ancho del dispositivo */
+            }
+
+            button, input[type="text"] {
+                font-size: 14px; /* Fuente más pequeña */
+                padding: 8px; /* Reduce el espacio */
             }
         }
     </style>
@@ -211,75 +176,29 @@
         </video>
     </div>
 
-    <!-- Logo -->
+    <!-- Logo en la esquina -->
     <img src="/static/logo.png" alt="Logo" class="logo">
 
-    <!-- Contenedor principal -->
-    <div class="container">
-        <!-- GIF -->
-        <div class="gif-container">
-            <img src="/static/imagen.png" alt="GIF Animado">
-        </div>
-
-        <!-- Chat -->
+    <!-- Contenedor del chat -->
+    <div class="chat-container">
         <div id="chat-box"></div>
         <form id="chat-form">
             <input type="text" id="message" placeholder="Escribe tu mensaje aquí..." required>
             <button type="submit">Enviar</button>
         </form>
-
-        <!-- Reproductor de música -->
-        <div class="music-container">
-            <form id="file-form">
-                <label for="audio-file">Selecciona un archivo de música:</label>
-                <input type="file" id="audio-file" accept="audio/*" required>
-                <button type="submit">Reproducir desde archivo</button>
-            </form>
-            <audio id="audio-player" controls></audio>
-
-            <form id="youtube-form">
-                <label for="youtube-url">Ingresa la URL del video de YouTube:</label>
-                <input type="text" id="youtube-url" placeholder="https://www.youtube.com/watch?v=ejemplo" required>
-                <button type="submit">Reproducir desde YouTube</button>
-            </form>
-            <iframe id="youtube-player" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="gif-container">
+            <!-- Coloca el GIF aquí -->
+            <img src="/static/imagen.png" alt="GIF Animado">
         </div>
     </div>
 
     <script>
         const chatBox = document.getElementById('chat-box');
-        const fileForm = document.getElementById('file-form');
-        const audioPlayer = document.getElementById('audio-player');
-        const youtubePlayer = document.getElementById('youtube-player');
-        const youtubeForm = document.getElementById('youtube-form');
-        const messageForm = document.getElementById('chat-form');
+        const form = document.getElementById('chat-form');
 
-        // Función para reproducir archivos locales
-        fileForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const file = document.getElementById('audio-file').files[0];
-            if (file) {
-                const fileURL = URL.createObjectURL(file);
-                audioPlayer.src = fileURL;
-                audioPlayer.play();
-            }
-        });
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
 
-        // Función para reproducir videos de YouTube
-        youtubeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const url = document.getElementById('youtube-url').value;
-            const videoId = url.match(/(?:v=|youtu\.be\/)([^&]+)/)?.[1];
-            if (videoId) {
-                youtubePlayer.src = `https://www.youtube.com/embed/${videoId}`;
-            } else {
-                alert('URL inválida');
-            }
-        });
-
-        // Función para enviar mensajes en el chat
-        messageForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
             const userMessage = document.getElementById('message').value;
 
             const userMessageElement = document.createElement('div');
@@ -317,7 +236,7 @@
                 chatBox.appendChild(botErrorElement);
             }
 
-            messageForm.reset();
+            form.reset();
         });
     </script>
 </body>
